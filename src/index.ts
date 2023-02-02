@@ -1,1 +1,1 @@
-export * from './lib/dom-string';
+export * from './dom-string/index';
