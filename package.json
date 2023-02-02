@@ -10,7 +10,9 @@
     "import": "./build/module/index.js"
   },
   "keywords": [
-    "binary string","base64", "ArrayBuffer to string"
+    "binary string",
+    "base64",
+    "ArrayBuffer to string"
   ],
   "files": [
     "build/main",
@@ -43,7 +45,7 @@
     "doc:json": "typedoc src/ --exclude **/*.spec.ts  --json build/docs/typedoc.json",
     "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
     "commit": "cz",
-    "reset-hard": "git clean -dfx && git reset --hard && pnpm i"
+    "postinstall": "tsx ./scripts/apply_hooks.ts"
   },
   "repository": {
     "type": "git",
