@@ -1,6 +1,6 @@
 {
   "name": "@iskl/binary-string",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "字符串和二进制互相转换，产物可以是arrayBuffer和base64，同时支持js的domString和uft8",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -10,7 +10,9 @@
     "import": "./build/module/index.js"
   },
   "keywords": [
-    "binary string","base64", "ArrayBuffer to string"
+    "binary string",
+    "base64",
+    "ArrayBuffer to string"
   ],
   "files": [
     "build/main",
