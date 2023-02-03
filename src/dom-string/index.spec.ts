@@ -1,4 +1,4 @@
-import test from 'ava';
+import test, { ExecutionContext } from 'ava';
 import {
   stringToArrayBuffer,
   arrayBufferToBase64,
@@ -51,52 +51,43 @@ test('dom字符串decode', (t) => {
   t.is(decode(b64), str);
 });
 
-function testEncoder(encoder: DomStringEncoder) {
-  return {
-    encoded: encoder.encode(),
-    decoded: encoder.decode(),
-    arrayBuffer: encoder.getArrayBuffer(),
-  };
+function testEncoder(encoder: DomStringEncoder, t: ExecutionContext) {
+  t.is(encoder.decode(), str);
+  t.is(encoder.encode(), b64);
+
+  const arrayBuffer = encoder.getArrayBuffer();
+
+  if (!arrayBuffer) {
+    t.fail();
+  } else {
+    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
+  }
+
+  // return {
+  //   encoded: encoder.encode(),
+  //   decoded: encoder.decode(),
+  //   arrayBuffer: encoder.getArrayBuffer(),
+  // };
 }
 
 test('encoder: 来源为string', (t) => {
   const encoder = new DomStringEncoder(str);
-  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
+  const passTypeEncoder = new DomStringEncoder(str, 'string');
 
-  t.is(decoded, str);
-  t.is(encoded, b64);
-  if (!arrayBuffer) {
-    t.fail();
-  } else {
-    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
-  }
+  testEncoder(encoder, t);
+  testEncoder(passTypeEncoder, t);
 });
 
 test('encoder: 来源为base64String', (t) => {
   const encoder = new DomStringEncoder(b64, 'base64String');
-
-  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
-
-  t.is(decoded, str);
-  t.is(encoded, b64);
-  if (!arrayBuffer) {
-    t.fail();
-  } else {
-    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
-  }
+  testEncoder(encoder, t);
 });
 
 test('encoder: 来源为arrayBuffer', (t) => {
   const { buffer } = Uint16Array.from(charCodeArray);
   const encoder = new DomStringEncoder(buffer);
+  const passTypeEncoder = new DomStringEncoder(buffer, 'arrayBuffer');
 
-  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
-
-  t.is(decoded, str);
-  t.is(encoded, b64);
-  if (!arrayBuffer) {
-    t.fail();
-  } else {
-    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
-  }
+  testEncoder(encoder, t);
+  testEncoder(passTypeEncoder, t);
 });
