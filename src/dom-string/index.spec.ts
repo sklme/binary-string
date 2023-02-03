@@ -6,6 +6,7 @@ import {
   base64ToArrayBuffer,
   arrayBufferToString,
   decode,
+  DomStringEncoder,
 } from '.';
 
 const str = '一二三123abc⑴⑵⑶☆★✓';
@@ -48,4 +49,54 @@ test('arrayBufferToString', (t) => {
 
 test('dom字符串decode', (t) => {
   t.is(decode(b64), str);
+});
+
+function testEncoder(encoder: DomStringEncoder) {
+  return {
+    encoded: encoder.encode(),
+    decoded: encoder.decode(),
+    arrayBuffer: encoder.getArrayBuffer(),
+  };
+}
+
+test('encoder: 来源为string', (t) => {
+  const encoder = new DomStringEncoder(str);
+  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
+
+  t.is(decoded, str);
+  t.is(encoded, b64);
+  if (!arrayBuffer) {
+    t.fail();
+  } else {
+    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
+  }
+});
+
+test('encoder: 来源为base64String', (t) => {
+  const encoder = new DomStringEncoder(b64, 'base64String');
+
+  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
+
+  t.is(decoded, str);
+  t.is(encoded, b64);
+  if (!arrayBuffer) {
+    t.fail();
+  } else {
+    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
+  }
+});
+
+test('encoder: 来源为arrayBuffer', (t) => {
+  const { buffer } = Uint16Array.from(charCodeArray);
+  const encoder = new DomStringEncoder(buffer);
+
+  const { arrayBuffer, decoded, encoded } = testEncoder(encoder);
+
+  t.is(decoded, str);
+  t.is(encoded, b64);
+  if (!arrayBuffer) {
+    t.fail();
+  } else {
+    t.deepEqual([...new Uint16Array(arrayBuffer)], charCodeArray);
+  }
 });
