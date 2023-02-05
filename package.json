@@ -19,6 +19,16 @@
       "import": "./build/module/utf8-string/index.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      "dom-string": [
+        "build/module/dom-string/index.d.ts"
+      ],
+      "utf8-string": [
+        "build/module/utf8-string/index.d.ts"
+      ]
+    }
+  },
   "keywords": [
     "binary string",
     "base64",
