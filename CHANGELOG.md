@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/sklme/binary-string/compare/v1.1.0...v1.2.0) (2023-02-05)
+
+
+### Features
+
+* relase as 1.2 ([ae2046d](https://github.com/sklme/binary-string/commit/ae2046d1c98f5b2146d9898fed96cb9165f6df85))
+
 ## [1.1.0](https://github.com/sklme/binary-string/compare/v1.0.0...v1.1.0) (2023-02-05)
 
 ### Features
