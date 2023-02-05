@@ -5,7 +5,7 @@
 
 module.exports = {
   // 'prepare-commit-msg': 'exec < /dev/tty && npx cz --hook || true',
-  'pre-push': 'npm run test',
+  'pre-push': 'npm run test && npm run cov:check',
 
   'pre-commit': 'npx lint-staged',
   'commit-msg': 'npx tsx scripts/verify_commit_msg.ts $1',
