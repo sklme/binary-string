@@ -66,7 +66,7 @@
     "doc:json": "typedoc src/ src/dom-string/ src/utf8-string/ --exclude **/*.spec.ts  --json build/docs/typedoc.json",
     "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs",
     "commit": "cz",
-    "postinstall": "tsx ./scripts/apply_hooks.ts"
+    "apply-hooks": "tsx ./scripts/apply_hooks.ts"
   },
   "repository": {
     "type": "git",
