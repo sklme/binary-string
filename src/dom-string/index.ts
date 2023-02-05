@@ -1,3 +1,5 @@
+import { BaseTransformer } from '../shared/base-transformer';
+
 export function stringToArrayBuffer(str: string) {
   // 因为js字符串是16位，使用Uint16Array转为成arrayBuffer
   const codeUnits = new Uint16Array(str.length);
@@ -43,76 +45,11 @@ export function decode(base64: string) {
   return arrayBufferToString(base64ToArrayBuffer(base64));
 }
 
-export type SourceType = 'string' | 'arrayBuffer' | 'base64String';
-
-export class DomStringEncoder {
-  // 缓存
-  #base64String = '';
-  #string = '';
-  #arrayBuffer: ArrayBufferLike = new ArrayBuffer(0);
-
-  // 数据类型
-  #sourceType: SourceType;
-  #source: string | ArrayBufferLike = '';
-
-  constructor(source: string | ArrayBuffer, sourceType?: SourceType) {
-    // 判断数据来源的类型
-    this.#source = source;
-
-    if (sourceType) {
-      this.#sourceType = sourceType || '';
-    } else {
-      if (source instanceof ArrayBuffer) {
-        this.#sourceType = 'arrayBuffer';
-      } else {
-        this.#sourceType = 'string';
-      }
-    }
-  }
-
-  encode() {
-    if (this.#base64String) return this.#base64String;
-
-    if (this.#sourceType === 'string') {
-      return (this.#base64String = encode(this.#source as string));
-    } else if (this.#sourceType === 'arrayBuffer') {
-      return (this.#base64String = arrayBufferToBase64(
-        this.#source as ArrayBufferLike,
-      ));
-    } else if (this.#sourceType === 'base64String') {
-      return (this.#base64String = this.#source as string);
-    }
-
-    return undefined;
-  }
-
-  decode() {
-    if (this.#string) return this.#string;
-
-    if (this.#sourceType === 'string') {
-      return (this.#string = this.#source as string);
-    } else if (this.#sourceType === 'arrayBuffer') {
-      return (this.#string = arrayBufferToString(
-        this.#source as ArrayBufferLike,
-      ));
-    } else if (this.#sourceType === 'base64String') {
-      return (this.#string = decode(this.#source as string));
-    }
-
-    return undefined;
-  }
-
-  getArrayBuffer() {
-    if (this.#arrayBuffer.byteLength) return this.#arrayBuffer;
-
-    if (this.#sourceType === 'string') {
-      return (this.#arrayBuffer = stringToArrayBuffer(this.#source as string));
-    } else if (this.#sourceType === 'arrayBuffer') {
-      return (this.#arrayBuffer = this.#source as ArrayBufferLike);
-    } else if (this.#sourceType === 'base64String') {
-      return (this.#arrayBuffer = base64ToArrayBuffer(this.#source as string));
-    }
-
-    return undefined;
-  }
+export class Transformer extends BaseTransformer {
+  _decode = decode;
+  _encode = encode;
+  arrayBufferToString = arrayBufferToString;
+  base64ToArrayBuffer = base64ToArrayBuffer;
+  arrayBufferToBase64 = arrayBufferToBase64;
+  stringToArrayBuffer = stringToArrayBuffer;
 }

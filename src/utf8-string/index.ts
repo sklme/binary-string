@@ -1,3 +1,5 @@
+import { BaseTransformer } from '../shared/base-transformer';
+
 /**
  * 那字符串转换成代表着utf8的编码的arrayBuffer
  * 假设有 '一二三abc'。
@@ -57,8 +59,15 @@ export function arrayBufferToString(buffer: ArrayBufferLike) {
   return decodeURIComponent(str);
 }
 
-export function docode(base64: string) {
+export function decode(base64: string) {
   return arrayBufferToString(base64ToArrayBuffer(base64));
 }
 
-// UTF8Tranforme
+export class Transformer extends BaseTransformer {
+  _decode = decode;
+  _encode = encode;
+  arrayBufferToString = arrayBufferToString;
+  base64ToArrayBuffer = base64ToArrayBuffer;
+  arrayBufferToBase64 = arrayBufferToBase64;
+  stringToArrayBuffer = stringToArrayBuffer;
+}

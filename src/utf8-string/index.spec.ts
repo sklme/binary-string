@@ -1,11 +1,12 @@
-import test from 'ava';
+import test, { ExecutionContext } from 'ava';
 import {
   stringToArrayBuffer,
   arrayBufferToBase64,
   encode,
   base64ToArrayBuffer,
   arrayBufferToString,
-  docode,
+  decode,
+  Transformer,
 } from '.';
 
 const str = '一二三123abc⑴⑵⑶☆★✓';
@@ -48,5 +49,48 @@ test('arrayBufferToString', (t) => {
 });
 
 test('decode', (t) => {
-  t.is(docode(base64Str), str);
+  t.is(decode(base64Str), str);
+});
+
+function testEncoder(transformer: Transformer, t: ExecutionContext) {
+  t.is(transformer.decode(), str);
+  t.is(transformer.encode(), base64Str);
+
+  const arrayBuffer = transformer.getArrayBuffer();
+
+  if (!arrayBuffer) {
+    t.fail();
+  } else {
+    t.deepEqual([...new Uint8Array(arrayBuffer)], charCodeArray);
+  }
+}
+
+test('Transformer, 来源是原始字符串', (t) => {
+  // 默认sourceType
+  const transformer = new Transformer(str);
+  // 指定sourceType
+  const passTypeTransformer = new Transformer(str, 'string');
+
+  testEncoder(transformer, t);
+  testEncoder(passTypeTransformer, t);
+});
+
+test('Transformer, 来源是ArrayBuffer', (t) => {
+  // 默认sourceType
+  const transformer = new Transformer(Uint8Array.from(charCodeArray).buffer);
+  // 指定sourceType
+  const passTypeTransformer = new Transformer(
+    Uint8Array.from(charCodeArray).buffer,
+    'arrayBuffer',
+  );
+
+  testEncoder(transformer, t);
+  testEncoder(passTypeTransformer, t);
+});
+
+test('Transformer, 来源是base64', (t) => {
+  // 默认sourceType
+  const transformer = new Transformer(base64Str, 'base64String');
+
+  testEncoder(transformer, t);
 });

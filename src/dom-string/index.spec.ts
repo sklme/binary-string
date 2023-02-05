@@ -6,7 +6,7 @@ import {
   base64ToArrayBuffer,
   arrayBufferToString,
   decode,
-  DomStringEncoder,
+  Transformer,
 } from '.';
 
 const str = '一二三123abc⑴⑵⑶☆★✓';
@@ -51,7 +51,7 @@ test('dom字符串decode', (t) => {
   t.is(decode(b64), str);
 });
 
-function testEncoder(encoder: DomStringEncoder, t: ExecutionContext) {
+function testEncoder(encoder: Transformer, t: ExecutionContext) {
   t.is(encoder.decode(), str);
   t.is(encoder.encode(), b64);
 
@@ -71,22 +71,22 @@ function testEncoder(encoder: DomStringEncoder, t: ExecutionContext) {
 }
 
 test('encoder: 来源为string', (t) => {
-  const encoder = new DomStringEncoder(str);
-  const passTypeEncoder = new DomStringEncoder(str, 'string');
+  const encoder = new Transformer(str);
+  const passTypeEncoder = new Transformer(str, 'string');
 
   testEncoder(encoder, t);
   testEncoder(passTypeEncoder, t);
 });
 
 test('encoder: 来源为base64String', (t) => {
-  const encoder = new DomStringEncoder(b64, 'base64String');
+  const encoder = new Transformer(b64, 'base64String');
   testEncoder(encoder, t);
 });
 
 test('encoder: 来源为arrayBuffer', (t) => {
   const { buffer } = Uint16Array.from(charCodeArray);
-  const encoder = new DomStringEncoder(buffer);
-  const passTypeEncoder = new DomStringEncoder(buffer, 'arrayBuffer');
+  const encoder = new Transformer(buffer);
+  const passTypeEncoder = new Transformer(buffer, 'arrayBuffer');
 
   testEncoder(encoder, t);
   testEncoder(passTypeEncoder, t);
