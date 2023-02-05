@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/sklme/binary-string/compare/v1.2.0...v1.3.0) (2023-02-05)
+
+
+### Features
+
+* remove postinstall ([ac10612](https://github.com/sklme/binary-string/commit/ac10612b9fce1f38da72b2a4aba1233da5a8d753))
+
 ## [1.2.0](https://github.com/sklme/binary-string/compare/v1.1.0...v1.2.0) (2023-02-05)
 
 
