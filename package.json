@@ -14,7 +14,7 @@
       "require": "./build/main/dom-string/index.js",
       "import": "./build/module/dom-string/index.js"
     },
-    "./utf8": {
+    "./utf8-string": {
       "require": "./build/main/utf8-string/index.js",
       "import": "./build/module/utf8-string/index.js"
     }
