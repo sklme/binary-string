@@ -1,25 +1,36 @@
 import { BaseTransformer } from '../shared/base-transformer';
 
+/**
+ * 那字符串转换成代表着utf8的编码的arrayBuffer
+ * 假设有 '一二三abc'。
+ * 先用encodeUri 转成: `%E4%B8%80%E4%BA%8C%E4%B8%89abc`。
+ * 然后再转成[228, 184, 128, 228, 186, 140, 228, 184, 137, 97, 98, 99]， 1字节的abc会取其charCode: 97，98，99。
+ * 然后将数组转成arrayBuffer
+ *
+ * @param str 需要转换的字符串
+ */
 export function stringToArrayBuffer(str: string) {
-  // 因为js字符串是16位，使用Uint16Array转为成arrayBuffer
-  const codeUnits = new Uint16Array(str.length);
-
-  for (let i = 0; i < codeUnits.length; i++) {
-    codeUnits[i] = str.charCodeAt(i);
+  const encoded = encodeURIComponent(str);
+  const charCodes: number[] = [];
+  let i = 0;
+  while (encoded[i]) {
+    if (encoded[i] === '%') {
+      const substr = encoded.slice(i, i + 3);
+      charCodes.push(parseInt(substr.slice(-2), 16));
+      i += 3;
+    } else {
+      charCodes.push(encoded[i].charCodeAt(0));
+      i++;
+    }
   }
 
-  return codeUnits.buffer;
+  return Uint8Array.from(charCodes).buffer;
 }
 
 export function arrayBufferToBase64(buffer: ArrayBufferLike) {
-  // base64的转换只接受占一个字节的字符，所以要把arrayBuffer读取为unu8Array，然后转为字符，最后转成base16
-  // 1. arrayBuffer读取为unu8Array
   const u8 = new Uint8Array(buffer);
-  // 2. 转为字符
   const oneByteChars = String.fromCharCode(...u8);
-  // 3. 转为base64
-  const b64 = btoa(oneByteChars);
-  return b64;
+  return btoa(oneByteChars);
 }
 
 export function encode(str: string) {
@@ -33,12 +44,19 @@ export function base64ToArrayBuffer(base64: string) {
   for (let i = 0; i < bytes.length; i++) {
     bytes[i] = binaryStr.charCodeAt(i);
   }
-
   return bytes.buffer;
 }
 
 export function arrayBufferToString(buffer: ArrayBufferLike) {
-  return String.fromCharCode(...new Uint16Array(buffer));
+  const u8 = new Uint8Array(buffer);
+
+  const str = [...u8]
+    .map((o) => {
+      return `%${o.toString(16)}`;
+    })
+    .join('');
+
+  return decodeURIComponent(str);
 }
 
 export function decode(base64: string) {
