@@ -27,16 +27,18 @@ pnpm add @iskl/binary-string
 将字符串作为 utf8 编码转换
 
 ```typescript
-const domTransformer = new UTF8Transformer('一二三123abc⑴⑵⑶☆★✓');
+import { UTF8Transformer } from '@iskl/binary-string';
+
+const utf8Transformer = new UTF8Transformer('一二三123abc⑴⑵⑶☆★✓');
 // 传入数据类型
 const base64SourceDomTransformer = new UTF8Transformer(
   '5LiA5LqM5LiJMTIzYWJj4pG04pG14pG24piG4piF4pyT',
   'base64String',
 );
 
-domTransformer.encode(); // 5LiA5LqM5LiJMTIzYWJj4pG04pG14pG24piG4piF4pyT
-domTransformer.decode(); // 一二三123abc⑴⑵⑶☆★✓
-domTransformer.getArrayBuffer();
+utf8Transformer.encode(); // 5LiA5LqM5LiJMTIzYWJj4pG04pG14pG24piG4piF4pyT
+utf8Transformer.decode(); // 一二三123abc⑴⑵⑶☆★✓
+utf8Transformer.getArrayBuffer();
 
 base64SourceDomTransformer.encode(); // 5LiA5LqM5LiJMTIzYWJj4pG04pG14pG24piG4piF4pyT
 base64SourceDomTransformer.decode(); // 一二三123abc⑴⑵⑶☆★✓
@@ -48,6 +50,8 @@ base64SourceDomTransformer.getArrayBuffer();
 将字符串作为 UTF16 编码转换
 
 ```typescript
+import { DomStringTransformer } from '@iskl/binary-string';
+
 const domTransformer = new DomStringTransformer('一二三123abc⑴⑵⑶☆★✓');
 // 传入数据类型
 const base64SourceDomTransformer = new DomStringTransformer(
@@ -77,7 +81,7 @@ import {
   base64ToArrayBuffer, // base64字符串转为中间二进制
   arrayBufferToString, // 中间二进制转为原始字符串
   encode, // 原始字符串转为base64字符串
-  decode, // 原始字符串转为base64字符串
+  decode, // base64字符串转为原始字符串
 } from '@iskl/binary-string/utf8-string';
 
 encode('一二三123abc⑴⑵⑶☆★✓'); // < 5LiA5LqM5LiJMTIzYWJj4pG04pG14pG24piG4piF4pyT
@@ -95,7 +99,7 @@ import {
   base64ToArrayBuffer, // base64字符串转为中间二进制
   arrayBufferToString, // 中间二进制转为原始字符串
   encode, // 原始字符串转为base64字符串
-  decode, // 原始字符串转为base64字符串
+  decode, // base64字符串转为原始字符串
 } from '@iskl/binary-string/dom-string';
 
 encode('一二三123abc⑴⑵⑶☆★✓'); // < AE6MTglOMQAyADMAYQBiAGMAdCR1JHYkBiYFJhMn
